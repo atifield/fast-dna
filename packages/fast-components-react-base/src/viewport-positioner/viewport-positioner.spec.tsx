@@ -2,6 +2,7 @@ import React from "react";
 import Adapter from "enzyme-adapter-react-16";
 import { configure, mount, shallow } from "enzyme";
 import ViewportPositioner, {
+    ViewportContext,
     ViewportPositionerClassNameContract,
     ViewportPositionerHandledProps,
     ViewportPositionerHorizontalPositionLabel,
@@ -164,6 +165,40 @@ describe("viewport positioner", (): void => {
 
         const positioner: any = rendered.find("BaseViewportPositioner");
         expect(positioner.instance().state.disabled).toBe(true);
+    });
+    
+    test("viewport is correctly set from viewport context", (): void => {
+        const anchorElement: React.RefObject<HTMLDivElement> = React.createRef<
+            HTMLDivElement
+        >();
+        const viewportElement: React.RefObject<HTMLDivElement> = React.createRef<
+            HTMLDivElement
+        >();
+
+        const rendered: any = mount(
+            <ViewportContext.Provider
+                value={{
+                    viewport: viewportElement
+                }}
+            >
+                <div ref={viewportElement}>
+                    <div>
+                        <div ref={anchorElement} />
+                        <ViewportPositioner
+                            anchor={anchorElement}
+                            managedClasses={managedClasses}
+                        />
+                    </div>
+                </div>
+            </ViewportContext.Provider>
+        );
+
+        const positioner: any = rendered.find("BaseViewportPositioner");
+        expect(
+            positioner
+                .instance()
+                ["getViewportElement"]()
+        ).toEqual(viewportElement.current);
     });
 
     test("positioning values applied correctly for specified default position - pt1", (): void => {

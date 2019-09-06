@@ -18,6 +18,7 @@ import {
     ViewportPositionerUnhandledProps,
     ViewportPositionerVerticalPosition,
 } from "./viewport-positioner.props";
+import { ViewportContext, ViewportContextType} from "./viewport-context";
 
 export interface ViewportPositionerState {
     disabled: boolean;
@@ -105,6 +106,8 @@ class ViewportPositioner extends Foundation<
     ViewportPositionerState
 > {
     public static displayName: string = `${DisplayNamePrefix}ViewportPositioner`;
+
+    public static contextType: React.Context<ViewportContextType> = ViewportContext;
 
     public static defaultProps: Partial<ViewportPositionerProps> = {
         horizontalPositioningMode: AxisPositioningMode.uncontrolled,
@@ -393,11 +396,15 @@ class ViewportPositioner extends Foundation<
      *  once to get correct initial placement
      */
     private setNoObserverMode = (): void => {
-        const viewPortElement: HTMLElement = this.getViewportElement();
+        const viewportElement: HTMLElement = this.getViewportElement();
         const anchorElement: HTMLElement = this.getAnchorElement();
 
+        if (isNil(viewportElement) || isNil(anchorElement)){
+            return;
+        }
+
         this.positionerRect = this.rootElement.current.getBoundingClientRect();
-        this.viewportRect = viewPortElement.getBoundingClientRect();
+        this.viewportRect = viewportElement.getBoundingClientRect();
         const anchorRect: ClientRect | DOMRect = anchorElement.getBoundingClientRect();
 
         this.anchorTop = anchorRect.top;
@@ -1064,21 +1071,29 @@ class ViewportPositioner extends Foundation<
     };
 
     /**
-     * get the viewport element
+     * get the viewport element, prefer one provided in props, then context, then document root
      */
     private getViewportElement = (): HTMLElement => {
-        if (isNil(this.props.viewport)) {
-            if (document.scrollingElement instanceof HTMLElement) {
-                return document.scrollingElement as HTMLElement;
+        if (!isNil(this.props.viewport)) {
+            if (this.props.viewport instanceof HTMLElement) {
+                return this.props.viewport;
+            } else {
+                return this.props.viewport.current;
             }
-            return null;
         }
 
-        if (this.props.viewport instanceof HTMLElement) {
-            return this.props.viewport;
-        } else {
-            return this.props.viewport.current;
+        if (!isNil(this.context.viewport)) {
+            if (this.context.viewport instanceof HTMLElement) {
+                return this.context.viewport;
+            } else {
+                return this.context.viewport.current;
+            }
         }
+
+        if (document.scrollingElement instanceof HTMLElement) {
+            return document.scrollingElement as HTMLElement;
+        }
+        return null;
     };
 
     /**
@@ -1133,7 +1148,7 @@ class ViewportPositioner extends Foundation<
         }
     };
 }
-
+ViewportPositioner.contextType = ViewportContext;
 export default ViewportPositioner;
 export * from "./viewport-positioner.props";
-export { ViewportPositionerClassNameContract };
+export { ViewportPositionerClassNameContract, ViewportContext, ViewportContextType  };

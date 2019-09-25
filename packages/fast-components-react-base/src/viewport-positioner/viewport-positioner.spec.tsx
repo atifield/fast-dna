@@ -21,11 +21,13 @@ import {
  */
 configure({ adapter: new Adapter() });
 
+// viewport rect is deliberately offset so we are testing that
+// calculations are correct when the viewport is not positioned at origin (i.e. x and y = 0)
 const viewportRect: ClientRect = {
-    top: 0,
-    right: 100,
-    bottom: 100,
-    left: 0,
+    top: 100,
+    right: 250,
+    bottom: 200,
+    left: 150,
     height: 100,
     width: 100,
 };
@@ -383,10 +385,10 @@ describe("viewport positioner", (): void => {
 
         positioner.instance().viewportRect = viewportRect;
         positioner.instance().positionerRect = positionerRectX70Y70;
-        positioner.instance().anchorTop = 80;
-        positioner.instance().anchorRight = 90;
-        positioner.instance().anchorBottom = 90;
-        positioner.instance().anchorLeft = 80;
+        positioner.instance().anchorTop = 180;
+        positioner.instance().anchorRight = 240;
+        positioner.instance().anchorBottom = 190;
+        positioner.instance().anchorLeft = 230;
         positioner.instance().anchorWidth = 10;
         positioner.instance().anchorHeight = 10;
         positioner.instance().scrollTop = 0;
@@ -395,30 +397,22 @@ describe("viewport positioner", (): void => {
         expect(
             positioner
                 .instance()
-                ["getHorizontalPositionAvailableWidth"](
-                    ViewportPositionerHorizontalPosition.left
-                )
+                ["getAvailableWidth"](ViewportPositionerHorizontalPosition.left)
         ).toBe(80);
         expect(
             positioner
                 .instance()
-                ["getHorizontalPositionAvailableWidth"](
-                    ViewportPositionerHorizontalPosition.right
-                )
+                ["getAvailableWidth"](ViewportPositionerHorizontalPosition.right)
         ).toBe(10);
         expect(
             positioner
                 .instance()
-                ["getVerticalPositionAvailableHeight"](
-                    ViewportPositionerVerticalPosition.top
-                )
+                ["getAvailableHeight"](ViewportPositionerVerticalPosition.top)
         ).toBe(80);
         expect(
             positioner
                 .instance()
-                ["getVerticalPositionAvailableHeight"](
-                    ViewportPositionerVerticalPosition.bottom
-                )
+                ["getAvailableHeight"](ViewportPositionerVerticalPosition.bottom)
         ).toBe(10);
     });
 
@@ -455,10 +449,10 @@ describe("viewport positioner", (): void => {
 
         positioner.instance().viewportRect = viewportRect;
         positioner.instance().positionerRect = positionerRectX70Y70;
-        positioner.instance().anchorTop = 80;
-        positioner.instance().anchorRight = 90;
-        positioner.instance().anchorBottom = 90;
-        positioner.instance().anchorLeft = 80;
+        positioner.instance().anchorTop = 180;
+        positioner.instance().anchorRight = 240;
+        positioner.instance().anchorBottom = 190;
+        positioner.instance().anchorLeft = 230;
         positioner.instance().anchorWidth = 10;
         positioner.instance().anchorHeight = 10;
         positioner.instance().scrollTop = 0;
@@ -467,28 +461,24 @@ describe("viewport positioner", (): void => {
         expect(
             positioner
                 .instance()
-                ["getHorizontalPositionAvailableWidth"](
-                    ViewportPositionerHorizontalPositionLabel.insetLeft
-                )
+                ["getAvailableWidth"](ViewportPositionerHorizontalPositionLabel.insetLeft)
         ).toBe(90);
         expect(
             positioner
                 .instance()
-                ["getHorizontalPositionAvailableWidth"](
+                ["getAvailableWidth"](
                     ViewportPositionerHorizontalPositionLabel.insetRight
                 )
         ).toBe(20);
         expect(
             positioner
                 .instance()
-                ["getVerticalPositionAvailableHeight"](
-                    ViewportPositionerVerticalPositionLabel.insetTop
-                )
+                ["getAvailableHeight"](ViewportPositionerVerticalPositionLabel.insetTop)
         ).toBe(90);
         expect(
             positioner
                 .instance()
-                ["getVerticalPositionAvailableHeight"](
+                ["getAvailableHeight"](
                     ViewportPositionerVerticalPositionLabel.insetBottom
                 )
         ).toBe(20);
@@ -603,10 +593,10 @@ describe("viewport positioner", (): void => {
 
         positioner.instance().viewportRect = viewportRect;
         positioner.instance().positionerRect = positionerRectX70Y70;
-        positioner.instance().anchorTop = 80;
-        positioner.instance().anchorRight = 90;
-        positioner.instance().anchorBottom = 90;
-        positioner.instance().anchorLeft = 80;
+        positioner.instance().anchorTop = 180;
+        positioner.instance().anchorRight = 240;
+        positioner.instance().anchorBottom = 190;
+        positioner.instance().anchorLeft = 230;
         positioner.instance().anchorWidth = 10;
         positioner.instance().anchorHeight = 10;
         positioner.instance().scrollTop = 0;
@@ -655,10 +645,10 @@ describe("viewport positioner", (): void => {
 
         positioner.instance().viewportRect = viewportRect;
         positioner.instance().positionerRect = positionerRectX20Y20;
-        positioner.instance().anchorTop = 10;
-        positioner.instance().anchorRight = 20;
-        positioner.instance().anchorBottom = 20;
-        positioner.instance().anchorLeft = 10;
+        positioner.instance().anchorTop = 110;
+        positioner.instance().anchorRight = 170;
+        positioner.instance().anchorBottom = 120;
+        positioner.instance().anchorLeft = 160;
         positioner.instance().anchorWidth = 10;
         positioner.instance().anchorHeight = 10;
         positioner.instance().scrollTop = 0;
@@ -708,10 +698,10 @@ describe("viewport positioner", (): void => {
         const positioner: any = rendered.find("BaseViewportPositioner");
 
         positioner.instance().viewportRect = viewportRect;
-        positioner.instance().anchorTop = 200;
-        positioner.instance().anchorRight = 210;
-        positioner.instance().anchorBottom = 210;
-        positioner.instance().anchorLeft = 200;
+        positioner.instance().anchorTop = 210;
+        positioner.instance().anchorRight = 270;
+        positioner.instance().anchorBottom = 220;
+        positioner.instance().anchorLeft = 260;
         positioner.instance().setState({ noObserverMode: false });
         expect(positioner.instance().state.noObserverMode).toBe(false);
 
@@ -721,22 +711,47 @@ describe("viewport positioner", (): void => {
                 ["getHorizontalTranslate"](
                     ViewportPositionerHorizontalPositionLabel.insetLeft
                 )
-        ).toBe(-111);
+        ).toBe(-21);
         expect(
             positioner
                 .instance()
                 ["getHorizontalTranslate"](ViewportPositionerHorizontalPosition.left)
-        ).toBe(-101);
+        ).toBe(-11);
         expect(
             positioner
                 .instance()
                 ["getVerticalTranslate"](ViewportPositionerVerticalPositionLabel.insetTop)
-        ).toBe(-111);
+        ).toBe(-21);
         expect(
             positioner
                 .instance()
                 ["getVerticalTranslate"](ViewportPositionerVerticalPosition.top)
-        ).toBe(-101);
+        ).toBe(-11);
+
+        expect(
+            positioner
+                .instance()
+                ["getHorizontalTranslate"](
+                    ViewportPositionerHorizontalPositionLabel.insetRight
+                )
+        ).toBe(0);
+        expect(
+            positioner
+                .instance()
+                ["getHorizontalTranslate"](ViewportPositionerHorizontalPosition.right)
+        ).toBe(0);
+        expect(
+            positioner
+                .instance()
+                ["getVerticalTranslate"](
+                    ViewportPositionerVerticalPositionLabel.insetBottom
+                )
+        ).toBe(0);
+        expect(
+            positioner
+                .instance()
+                ["getVerticalTranslate"](ViewportPositionerVerticalPosition.bottom)
+        ).toBe(0);
     });
 
     test("Translate transforms calculated correctly - bottom/right", (): void => {
@@ -773,10 +788,10 @@ describe("viewport positioner", (): void => {
         const positioner: any = rendered.find("BaseViewportPositioner");
 
         positioner.instance().viewportRect = viewportRect;
-        positioner.instance().anchorTop = -210;
-        positioner.instance().anchorRight = -200;
-        positioner.instance().anchorBottom = -200;
-        positioner.instance().anchorLeft = -210;
+        positioner.instance().anchorTop = 80;
+        positioner.instance().anchorRight = 140;
+        positioner.instance().anchorBottom = 90;
+        positioner.instance().anchorLeft = 130;
 
         expect(
             positioner
@@ -784,24 +799,47 @@ describe("viewport positioner", (): void => {
                 ["getHorizontalTranslate"](
                     ViewportPositionerHorizontalPositionLabel.insetRight
                 )
-        ).toBe(211);
+        ).toBe(21);
         expect(
             positioner
                 .instance()
                 ["getHorizontalTranslate"](ViewportPositionerHorizontalPosition.right)
-        ).toBe(201);
+        ).toBe(11);
         expect(
             positioner
                 .instance()
                 ["getVerticalTranslate"](
                     ViewportPositionerVerticalPositionLabel.insetBottom
                 )
-        ).toBe(211);
+        ).toBe(21);
         expect(
             positioner
                 .instance()
                 ["getVerticalTranslate"](ViewportPositionerVerticalPosition.bottom)
-        ).toBe(201);
+        ).toBe(11);
+
+        expect(
+            positioner
+                .instance()
+                ["getHorizontalTranslate"](
+                    ViewportPositionerHorizontalPositionLabel.insetLeft
+                )
+        ).toBe(0);
+        expect(
+            positioner
+                .instance()
+                ["getHorizontalTranslate"](ViewportPositionerHorizontalPosition.left)
+        ).toBe(0);
+        expect(
+            positioner
+                .instance()
+                ["getVerticalTranslate"](ViewportPositionerVerticalPositionLabel.insetTop)
+        ).toBe(0);
+        expect(
+            positioner
+                .instance()
+                ["getVerticalTranslate"](ViewportPositionerVerticalPosition.top)
+        ).toBe(0);
     });
 
     test("Positioner moves to biggest area on updateLayout() when spacing changes", (): void => {
@@ -843,10 +881,10 @@ describe("viewport positioner", (): void => {
 
         positioner.instance().viewportRect = viewportRect;
         positioner.instance().positionerRect = positionerRectX70Y70;
-        positioner.instance().anchorTop = 80;
-        positioner.instance().anchorRight = 90;
-        positioner.instance().anchorBottom = 90;
-        positioner.instance().anchorLeft = 80;
+        positioner.instance().anchorTop = 180;
+        positioner.instance().anchorRight = 240;
+        positioner.instance().anchorBottom = 190;
+        positioner.instance().anchorLeft = 230;
         positioner.instance().anchorWidth = 10;
         positioner.instance().anchorHeight = 10;
         positioner.instance().scrollTop = 0;
@@ -862,10 +900,10 @@ describe("viewport positioner", (): void => {
             ViewportPositionerVerticalPosition.top
         );
 
-        positioner.instance().anchorTop = 10;
-        positioner.instance().anchorRight = 20;
-        positioner.instance().anchorBottom = 20;
-        positioner.instance().anchorLeft = 10;
+        positioner.instance().anchorTop = 110;
+        positioner.instance().anchorRight = 170;
+        positioner.instance().anchorBottom = 120;
+        positioner.instance().anchorLeft = 160;
 
         positioner.instance()["updateLayout"]();
 
@@ -913,10 +951,10 @@ describe("viewport positioner", (): void => {
 
         positioner.instance().viewportRect = viewportRect;
         positioner.instance().positionerRect = positionerRectX70Y70;
-        positioner.instance().anchorTop = 80;
-        positioner.instance().anchorRight = 90;
-        positioner.instance().anchorBottom = 90;
-        positioner.instance().anchorLeft = 80;
+        positioner.instance().anchorTop = 180;
+        positioner.instance().anchorRight = 240;
+        positioner.instance().anchorBottom = 190;
+        positioner.instance().anchorLeft = 230;
         positioner.instance().anchorWidth = 10;
         positioner.instance().anchorHeight = 10;
         positioner.instance().scrollTop = 0;
@@ -932,10 +970,10 @@ describe("viewport positioner", (): void => {
             ViewportPositionerVerticalPosition.top
         );
 
-        positioner.instance().anchorTop = 20;
-        positioner.instance().anchorRight = 30;
-        positioner.instance().anchorBottom = 30;
-        positioner.instance().anchorLeft = 20;
+        positioner.instance().anchorTop = 120;
+        positioner.instance().anchorRight = 180;
+        positioner.instance().anchorBottom = 130;
+        positioner.instance().anchorLeft = 170;
 
         positioner.instance()["updateLayout"]();
 
@@ -946,10 +984,10 @@ describe("viewport positioner", (): void => {
             ViewportPositionerVerticalPosition.top
         );
 
-        positioner.instance().anchorTop = 10;
-        positioner.instance().anchorRight = 20;
-        positioner.instance().anchorBottom = 20;
-        positioner.instance().anchorLeft = 10;
+        positioner.instance().anchorTop = 110;
+        positioner.instance().anchorRight = 170;
+        positioner.instance().anchorBottom = 120;
+        positioner.instance().anchorLeft = 160;
 
         positioner.instance()["updateLayout"]();
 

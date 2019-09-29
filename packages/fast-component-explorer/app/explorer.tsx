@@ -83,6 +83,7 @@ import { Direction } from "@microsoft/fast-web-utilities";
 import { ColorRGBA64, parseColor } from "@microsoft/fast-colors";
 import { format, multiply, toPx } from "@microsoft/fast-jss-utilities";
 import { NavigationMenuClassNameContract } from "@microsoft/fast-tooling-react/dist/navigation-menu/navigation-menu.style";
+import { StandardLuminance } from "@microsoft/fast-components-styles-msft/dist/utilities/color/neutral-layer";
 
 interface ObjectOfComponentViewConfigs {
     [key: string]: ComponentViewConfig<any>;
@@ -111,9 +112,6 @@ function setViewConfigsWithCustomConfig(
 
     return componentViewConfigs;
 }
-
-const dark: string = `#333333`;
-const light: string = "#FFFFFF";
 
 class Explorer extends Foundation<ExplorerHandledProps, {}, ExplorerState> {
     public static displayName: string = "Explorer";
@@ -441,7 +439,7 @@ class Explorer extends Foundation<ExplorerHandledProps, {}, ExplorerState> {
                 viewerContentProps={this.state.scenario}
                 responsive={true}
                 jssStyleSheet={this.viewerStyleOverrides(
-                    get(this.state, "viewConfig.backgroundColor")
+                    neutralLayerL1(this.state.viewConfig)
                 )}
             />
         );
@@ -791,12 +789,14 @@ class Explorer extends Foundation<ExplorerHandledProps, {}, ExplorerState> {
     };
 
     private handleUpdateTheme = (): void => {
-        const isLightTheme: boolean = this.state.theme === ThemeName.light;
-        const updatedThemeColor: string = isLightTheme ? dark : light;
+        const isLightMode: boolean = this.state.theme === ThemeName.light;
+        const updatedLuminance: number = isLightMode
+            ? StandardLuminance.DarkMode
+            : StandardLuminance.LightMode;
         this.setState({
-            theme: isLightTheme ? ThemeName.dark : ThemeName.light,
+            theme: isLightMode ? ThemeName.dark : ThemeName.light,
             viewConfig: merge({}, this.state.viewConfig, {
-                backgroundColor: updatedThemeColor,
+                baseLayerLuminance: updatedLuminance,
             }),
         });
     };

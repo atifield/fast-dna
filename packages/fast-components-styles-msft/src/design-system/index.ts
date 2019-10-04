@@ -110,6 +110,11 @@ export interface DesignSystem {
     disabledOpacity: number;
 
     /**
+     * A normalized motion value, with 0 being no motion and 1 being full motion
+     */
+    relativeMotion: number;
+
+    /**
      * Color swatch deltas for the accent-fill recipe.
      */
     accentFillRestDelta: number;
@@ -212,6 +217,7 @@ const designSystemDefaults: DesignSystem = {
     neutralPalette,
     accentPalette,
     accentBaseColor: "#0078D4",
+    relativeMotion: 0.5,
 
     /**
      * Recipe Deltas

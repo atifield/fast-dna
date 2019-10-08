@@ -1,25 +1,26 @@
-import { HorizontalOverflowClassNameContract } from "@microsoft/fast-components-class-name-contracts-base";
-import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
 import {
-    classNames,
     Direction,
+    classNames,
     getClientRectWithMargin,
 } from "@microsoft/fast-web-utilities";
-import { canUseDOM } from "exenv-es6";
-import { get } from "lodash-es";
-import throttle from "raf-throttle";
-import React from "react";
 import {
     DisplayNamePrefix,
     ResizeObserverClassDefinition,
     ResizeObserverEntry,
 } from "../utilities";
+import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
 import {
     HorizontalOverflowHandledProps,
     HorizontalOverflowProps,
     HorizontalOverflowUnhandledProps,
     PositionChange,
 } from "./horizontal-overflow.props";
+
+import { HorizontalOverflowClassNameContract } from "@microsoft/fast-components-class-name-contracts-base";
+import React from "react";
+import { canUseDOM } from "exenv-es6";
+import { get } from "lodash-es";
+import throttle from "raf-throttle";
 
 export enum ButtonDirection {
     previous = "previous",
@@ -92,7 +93,7 @@ class HorizontalOverflow extends Foundation<
         this.overflow = false;
 
         this.state = {
-            itemsHeight: 0,
+            itemsHeight: 344,
         };
     }
 
